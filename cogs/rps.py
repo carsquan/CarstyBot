@@ -9,8 +9,8 @@ async def checkWinner(p1,p2):
         return 0
     elif ((p1 == 0 and p2 == 1) or (p1 == 1 and p2 == 2 ) or (p1 == 2 and p2 == 0)):
         return 2
-    elif ((p1 == 1 and p2 == 0) or (p1==2 and p2 == 2) or (p1 ==0 and p2 == 0)):
-        return 0
+    elif ((p1 == 1 and p2 == 0) or (p1==2 and p2 == 1) or (p1 ==0 and p2 == 2)):
+        return 1
 
 async def confirmation(self, message, sentUser, channel, successMessage = ':white_check_mark: Operation successful', cancelledMessage = ':x: Operation cancelled'):
     new_message = await channel.send(message)
@@ -58,12 +58,15 @@ async def rpsChoice(self, sentUser):
     while True:
         if str(reaction) == '🔥':
             await sentUser.send(content="You have chosen fire")
+            print(f"{sentUser.id} chose fire")
             return 0
         elif str(reaction) == '💧':
             await sentUser.send(content="You have chosen water")
+            print(f"{sentUser.id} chose water")
             return 1
         elif str(reaction) == '🌲':
             await sentUser.send(content="You have chosen grass")
+            print(f"{sentUser.id} chose grass")
             return 2
 
         try:
@@ -88,13 +91,12 @@ async def playRockPaperScissors(self, p1, p2,channel):
     try:
         if not await confirmation(self, f'<@!{p2.id}>! Do you want to play Rock Paper Scissors with {p1.display_name}?', p2, channel, cancelledMessage=':x: Rock Paper Scissors cancelled!', successMessage='Starting Rock Paper Scissors'):
             return
-        print("Confirmed")
         p1Choice = await rpsChoice(self,sentUser = p1)
         p2Choice = await rpsChoice(self,sentUser = p2)
         switcher = {
             0: "Draw",
-            1: f"{p1.display_name} won!",
-            2: f"{p2.display_name} won!",
+            1: f"<@!{p1.id}> won!",
+            2: f"<@!{p2.id}> won!",
         }
         msg = switcher.get(await checkWinner(p1Choice,p2Choice),"Error or Someone times out smh")
         return await channel.send(msg)
@@ -120,7 +122,6 @@ class rps(commands.Cog):
         print(f'{ctx.author} has challenged {user} to Rock Paper Scissors')
         try:
             p2id = int(user[3:-1])
-            print(p2id)
             playerTwo = await ctx.guild.fetch_member(p2id)
             
             await playRockPaperScissors(self, ctx.author, playerTwo, ctx.channel)
