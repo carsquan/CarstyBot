@@ -54,6 +54,7 @@ async def rpsChoice(self, sentUser):
     reaction = None
 
     while True:
+        print(reaction)
         if str(reaction) == '🔥':
             await sentUser.send(content="You have chosen fire")
             print(f"{sentUser.id} chose fire")
@@ -69,9 +70,7 @@ async def rpsChoice(self, sentUser):
 
         try:
             reaction, user = await self.client.wait_for('reaction_add', timeout = 30.0, check = check)
-            #await new_message.remove_reaction(reaction, user)
         except:
-            #await new_message.clear_reactions()
             await sentUser.send(content="You have run out of time(sad)")
             return
 
