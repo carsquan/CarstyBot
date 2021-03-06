@@ -5,13 +5,11 @@ from discord.ext import commands
 import random
 
 async def checkWinner(p1,p2):
-    if(p1 == p2):
-        return 0
-    elif ((p1 == 0 and p2 == 1) or (p1 == 1 and p2 == 2 ) or (p1 == 2 and p2 == 0)):
+    if ((p1 == 0 and p2 == 1) or (p1 == 1 and p2 == 2 ) or (p1 == 2 and p2 == 0)):
         return 2
     elif ((p1 == 1 and p2 == 0) or (p1==2 and p2 == 1) or (p1 ==0 and p2 == 2)):
         return 1
-
+    return 0
 async def confirmation(self, message, sentUser, channel, successMessage = ':white_check_mark: Operation successful', cancelledMessage = ':x: Operation cancelled'):
     new_message = await channel.send(message)
 
